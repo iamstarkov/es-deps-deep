@@ -6,7 +6,7 @@
 [![Coveralls Status][coveralls-image]][coveralls-url]
 [![Dependency Status][depstat-image]][depstat-url]
 
-> ECMAScript 2015+/CommonJS module dependencies resolved array in depth
+> ECMAScript 2015+/CommonJS module dependencies resolved in depth
 
 ## Install
 
@@ -17,34 +17,60 @@
 ```js
 import { esDepsDeep, esDepsDeepAsync } from 'es-deps-deep';
 
-esDepsDeep('unicorns'); // unicorns
-esDepsDeepAsync('unicorns')
-  .then(result => console.log(result)); // unicorns
+esDepsDeep('./fixtures/extended/index.js')
+  .then(result => console.log(result)); /* [
+  { requested: null,
+    from: null,
+    resolved: '/Users/iamstarkov/projects/es-deps-deep/fixtures/extended/index.js' },
+  { requested: './first/index.js',
+    from: '/Users/iamstarkov/projects/es-deps-deep/fixtures/extended/index.js',
+    resolved: '/Users/iamstarkov/projects/es-deps-deep/fixtures/extended/first/index.js' },
+  { requested: './second/index.js',
+    from: '/Users/iamstarkov/projects/es-deps-deep/fixtures/extended/first/index.js',
+    resolved: '/Users/iamstarkov/projects/es-deps-deep/fixtures/extended/first/second/index.js' },
+  { requested: '../third/index.js',
+    from: '/Users/iamstarkov/projects/es-deps-deep/fixtures/extended/first/index.js',
+    resolved: '/Users/iamstarkov/projects/es-deps-deep/fixtures/extended/third/index.js' },
+  { requested: '../first/fourth/index.js',
+    from: '/Users/iamstarkov/projects/es-deps-deep/fixtures/extended/third/index.js',
+    resolved: '/Users/iamstarkov/projects/es-deps-deep/fixtures/extended/first/fourth/index.js' } ] */
 ```
 
 ## API
 
-### esDepsDeep(input, [options])
+### esDepsDeepAsync(file, excludeFn)
 
-### esDepsDeepAsync(input, [options])
+Return a promise that resolves to `Array[Object]`, where object is  [`es-dep-unit`][es-dep-unit].
 
-Return a promise that resolves to `result`.
+[es-dep-unit]: https://github.com/iamstarkov/es-dep-unit
 
-#### input
+#### file
 
 *Required*  
 Type: `String`
 
-Lorem ipsum.
+Entry point of the for your app.
 
-#### options
+#### excludeFn
 
-##### foo
+Type: `Function`  
+Default: `() => false;`
 
-Type: `Boolean`  
-Default: `false`
+`excludeFn` decides items to exclude from [`es-deps-resolved`][es-deps-resolved] each time when it's going to go deeper.
 
-Lorem ipsum.
+[es-deps-resolved]: https://github.com/iamstarkov/es-deps-resolved
+
+## Related
+
+* [es-deps][es-deps] — ECMAScript 2015+/CommonJS module dependencies array
+* [es-deps-from-string][es-deps-from-string] — ECMAScript 2015+/CommonJS module dependencies array from string
+* [es-deps-resolved][es-deps-resolved] — ECMAScript 2015+/CommonJS module dependencies resolved array
+* [es-dep-unit][es-dep-unit] — Constructor for ECMAScript 2015+/CommonJS dependency unit `Object { requested, from, resolved }`
+
+[es-deps]: https://github.com/iamstarkov/es-deps
+[es-deps-from-string]: https://github.com/iamstarkov/es-deps-from-string
+[es-deps-resolved]: https://github.com/iamstarkov/es-deps-resolved
+[es-dep-unit]: https://github.com/iamstarkov/es-dep-unit
 
 ## License
 
