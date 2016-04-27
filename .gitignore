@@ -4,3 +4,4 @@ coverage
 npm-debug.log
 index.es5.js
 .nyc_output
+!fixtures/**/node_modules
