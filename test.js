@@ -96,6 +96,15 @@ test('missing', async t => {
   t.is(_.length, 4);
 });
 
+test.todo('exclude x N');
+test.todo('built-in-modules');
+test.todo('json');
+test.todo('no-unused-files');
+test.todo('no-missed-files');
+test.todo('no-unused-modules');
+test.todo('no-missed-modules');
+
 test('unresolved', t => t.throws(esDepsDeep('./fixtures/unresolved'), Error));
 test('empty input', t => t.throws(esDepsDeep(), TypeError));
 test('invalid input', t => t.throws(esDepsDeep(2), TypeError));
+test.todo('invalid excludeFn');
