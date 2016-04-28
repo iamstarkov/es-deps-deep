@@ -100,7 +100,7 @@ test.todo('exclude x N');
 
 test('builtin', async t => {
   const _ = await esDepsDeep('./fixtures/builtin');
-  const dep = esDepUnitMock(['fixtures', 'missing']);
+  const dep = esDepUnitMock(['fixtures', 'builtin']);
   t.deepEqual(_[0], dep(null, null, './index.js'));
   t.deepEqual(_[1], dep('path',   './index.js', 'path'));
   t.is(_.length, 2);
