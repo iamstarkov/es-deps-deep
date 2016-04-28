@@ -97,7 +97,15 @@ test('missing', async t => {
 });
 
 test.todo('exclude x N');
-test.todo('built-in-modules');
+
+test('builtin', async t => {
+  const _ = await esDepsDeep('./fixtures/builtin');
+  const dep = esDepUnitMock(['fixtures', 'missing']);
+  t.deepEqual(_[0], dep(null, null, './index.js'));
+  t.deepEqual(_[1], dep('path',   './index.js', 'path'));
+  t.is(_.length, 2);
+});
+
 test.todo('json');
 test.todo('no-unused-files');
 test.todo('no-missed-files');
