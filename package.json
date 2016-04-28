@@ -1,6 +1,6 @@
 {
   "name": "es-deps-deep",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "ECMAScript 2015+/CommonJS module dependencies resolved in depth",
   "main": "index.es5.js",
   "jsnext:main": "index.js",
