@@ -21,9 +21,10 @@ function esDepsDeep(file, excludeFn = R.F) {
   );
 
   const isInCache = R.pipe(_resolved, R.contains(R.__, cache));
+  const addToCache = _ => { cache.push(_.resolved); };
 
   const walk = item => R.ifElse(isInCache, R.always([]), R.pipeP(toPromise,
-    R.tap(_ => { cache.push(_.resolved); }),
+    R.tap(addToCache),
     deps,
     mapWalk,
     R.unnest,
