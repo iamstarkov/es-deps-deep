@@ -106,7 +106,15 @@ test('builtin', async t => {
   t.is(_.length, 2);
 });
 
-test.todo('json');
+test('json', async t => {
+  const _ = await esDepsDeep('./fixtures/json');
+  const dep = esDepUnitMock(['fixtures', 'json']);
+  t.deepEqual(_[0], dep(null, null, './index.js'));
+  t.deepEqual(_[1], dep('./person.json',   './index.js', './person.json'));
+  t.deepEqual(_[2], dep('./list.json',     './index.js', './list.json'));
+  t.is(_.length, 3);
+});
+
 test.todo('no-unused-files');
 test.todo('no-missed-files');
 test.todo('no-unused-modules');

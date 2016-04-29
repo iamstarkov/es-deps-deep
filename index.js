@@ -16,16 +16,19 @@ const _resolved = R.prop('resolved');
 // const l = (msg = 'LOG') => R.tap(console.log.bind(console, msg));
 // const id = R.identity;
 
-// hasNoDeps :: String -> Boolean
-// detect if dep cannot have deps (unresolved or builtin module)
-const hasNoDeps = R.either(R.isNil, isBuiltinModule);
+// isJSON :: String -> Boolean
+const isJSON = R.pipe(R.split('.'), R.last, R.equals('json'));
+
+// emptyDeps :: -> []
+const emptyDeps = R.always([]);
 
 // deps :: String -> Boolean
-// resolve dep's deps
-const deps = R.pipeP(toPromise,
-  _resolved,
-  R.ifElse(hasNoDeps, R.always([]), esDepsResolved)
-);
+const deps = R.pipeP(toPromise, _resolved, R.cond([
+  [R.isNil, emptyDeps],
+  [isBuiltinModule, emptyDeps],
+  [isJSON, emptyDeps],
+  [R.T, esDepsResolved],
+]));
 
 // esDepsDeep :: String -> Array[Object]
 function esDepsDeep(file, excludeFn = R.F) {
