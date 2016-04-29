@@ -136,27 +136,27 @@ test('exclude entry', async t => {
 });
 
 test('exclude modules', async t => {
-  const _ = await esDepsDeep('./fixtures/exclude', kit.requestedModule);
+  const _ = await esDepsDeep('./fixtures/exclude', kit.isRequestedPackage);
   t.is(_.length, 3);
 });
 
 test('exclude local files', async t => {
-  const _ = await esDepsDeep('./fixtures/exclude', kit.requestedLocalFile);
+  const _ = await esDepsDeep('./fixtures/exclude', kit.isRequestedLocalFile);
   t.is(_.length, 3);
 });
 
 test('exclude node_modules', async t => {
-  const _ = await esDepsDeep('./fixtures/exclude', kit.inNodeModules);
+  const _ = await esDepsDeep('./fixtures/exclude', kit.isResolvedInNM);
   t.is(_.length, 2);
 });
 
 test('exclude resolved', async t => {
-  const _ = await esDepsDeep('./fixtures/exclude', kit.resolved);
+  const _ = await esDepsDeep('./fixtures/exclude', kit.isResolved);
   t.is(_.length, 0);
 });
 
 test('exclude not resolved', async t => {
-  const _ = await esDepsDeep('./fixtures/exclude', kit.notResolved);
+  const _ = await esDepsDeep('./fixtures/exclude', kit.isNotResolved);
   t.is(_.length, 5);
 });
 
