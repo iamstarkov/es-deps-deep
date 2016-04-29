@@ -1,6 +1,8 @@
 /* eslint-disable no-multi-spaces, max-len */
 import test from 'ava';
+import R from 'ramda';
 import esDepsDeep from './index';
+import kit from 'es-dep-kit';
 import { esDepUnitMock } from 'es-dep-unit';
 
 test('basic one', async t => {
@@ -96,8 +98,6 @@ test('missing', async t => {
   t.is(_.length, 4);
 });
 
-test.todo('exclude x N');
-
 test('builtin', async t => {
   const _ = await esDepsDeep('./fixtures/builtin');
   const dep = esDepUnitMock(['fixtures', 'builtin']);
@@ -112,6 +112,60 @@ test('json', async t => {
   t.deepEqual(_[0], dep(null, null, './index.js'));
   t.deepEqual(_[1], dep('./person.json',   './index.js', './person.json'));
   t.deepEqual(_[2], dep('./list.json',     './index.js', './list.json'));
+  t.is(_.length, 3);
+});
+
+test('not exclude at all, by default', async t => {
+  const _ = await esDepsDeep('./fixtures/exclude');
+  t.is(_.length, 5);
+});
+
+test('not exclude at all', async t => {
+  const _ = await esDepsDeep('./fixtures/exclude', R.F);
+  t.is(_.length, 5);
+});
+
+test('exclude everything', async t => {
+  const _ = await esDepsDeep('./fixtures/exclude', R.T);
+  t.is(_.length, 0);
+});
+
+test('exclude entry', async t => {
+  const _ = await esDepsDeep('./fixtures/exclude', kit.isEntry);
+  t.is(_.length, 0);
+});
+
+test('exclude modules', async t => {
+  const _ = await esDepsDeep('./fixtures/exclude', kit.requestedModule);
+  t.is(_.length, 3);
+});
+
+test('exclude local files', async t => {
+  const _ = await esDepsDeep('./fixtures/exclude', kit.requestedLocalFile);
+  t.is(_.length, 3);
+});
+
+test('exclude node_modules', async t => {
+  const _ = await esDepsDeep('./fixtures/exclude', kit.inNodeModules);
+  t.is(_.length, 2);
+});
+
+test('exclude resolved', async t => {
+  const _ = await esDepsDeep('./fixtures/exclude', kit.resolved);
+  t.is(_.length, 0);
+});
+
+test('exclude not resolved', async t => {
+  const _ = await esDepsDeep('./fixtures/exclude', kit.notResolved);
+  t.is(_.length, 5);
+});
+
+test('exclude third parties', async t => {
+  const _ = await esDepsDeep('./fixtures/exclude', kit.isThirdParty);
+  const dep = esDepUnitMock(['fixtures', 'exclude']);
+  t.deepEqual(_[0], dep(null, null, './index.js'));
+  t.deepEqual(_[1], dep('meow',  './index.js', './node_modules/meow/index.js'));
+  t.deepEqual(_[2], dep('./pew', './index.js', './pew.js'));
   t.is(_.length, 3);
 });
 
