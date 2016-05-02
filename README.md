@@ -66,11 +66,13 @@ Default: `() => false;`
 * [es-deps-from-string][es-deps-from-string] — ECMAScript 2015+/CommonJS module dependencies array from string
 * [es-deps-resolved][es-deps-resolved] — ECMAScript 2015+/CommonJS module dependencies resolved array
 * [es-dep-unit][es-dep-unit] — Constructor for ECMAScript 2015+/CommonJS dependency unit `Object { requested, from, resolved }`
+* [es-dep-kit][es-dep-kit] — ECMAScript 2015+/CommonJS module dependencies helpers kit
 
 [es-deps]: https://github.com/iamstarkov/es-deps
 [es-deps-from-string]: https://github.com/iamstarkov/es-deps-from-string
 [es-deps-resolved]: https://github.com/iamstarkov/es-deps-resolved
 [es-dep-unit]: https://github.com/iamstarkov/es-dep-unit
+[es-dep-kit]: https://github.com/iamstarkov/es-dep-kit
 
 ## License
 
