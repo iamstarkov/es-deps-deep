@@ -3,18 +3,18 @@ import test from 'ava';
 import R from 'ramda';
 import esDepsDeep from './index';
 import kit from 'es-dep-kit';
-import { esDepUnitMock } from 'es-dep-unit';
+import { mock as depMock } from 'es-dep-unit';
 
 test('basic one', async t => {
   const _ = await esDepsDeep('./fixtures/basic/first/second/index.js');
-  const dep = esDepUnitMock(['fixtures', 'basic']);
+  const dep = depMock(['fixtures', 'basic']);
   t.deepEqual(_[0], dep(null, null, './first/second/index.js'));
   t.is(_.length, 1);
 });
 
 test('basic two', async t => {
   const _ = await esDepsDeep('./fixtures/basic/first/index.js');
-  const dep = esDepUnitMock(['fixtures', 'basic']);
+  const dep = depMock(['fixtures', 'basic']);
   t.deepEqual(_[0], dep(null, null, './first/index.js'));
   t.deepEqual(_[1], dep('./second/index.js', './first/index.js', './first/second/index.js'));
   t.is(_.length, 2);
@@ -22,7 +22,7 @@ test('basic two', async t => {
 
 test('basic three', async t => {
   const _ = await esDepsDeep('./fixtures/basic/index.js');
-  const dep = esDepUnitMock(['fixtures', 'basic']);
+  const dep = depMock(['fixtures', 'basic']);
   t.deepEqual(_[0], dep(null, null, './index.js'));
   t.deepEqual(_[1], dep('./first/index.js', './index.js', './first/index.js'));
   t.deepEqual(_[2], dep('./second/index.js', './first/index.js', './first/second/index.js'));
@@ -31,7 +31,7 @@ test('basic three', async t => {
 
 test('basic plus', async t => {
   const _ = await esDepsDeep('./fixtures/basic-plus/index.js');
-  const dep = esDepUnitMock(['fixtures', 'basic-plus']);
+  const dep = depMock(['fixtures', 'basic-plus']);
   t.deepEqual(_[0], dep(null, null, './index.js'));
   t.deepEqual(_[1], dep('./first/index.js',  './index.js',              './first/index.js'));
   t.deepEqual(_[2], dep('./second/index.js', './first/index.js',        './first/second/index.js'));
@@ -41,7 +41,7 @@ test('basic plus', async t => {
 
 test('extended', async t => {
   const _ = await esDepsDeep('./fixtures/extended/index.js');
-  const dep = esDepUnitMock(['fixtures', 'extended']);
+  const dep = depMock(['fixtures', 'extended']);
   t.deepEqual(_[0], dep(null, null, './index.js'));
   t.deepEqual(_[1], dep('./first/index.js', './index.js', './first/index.js'));
   t.deepEqual(_[2], dep('./second/index.js', './first/index.js', './first/second/index.js'));
@@ -52,7 +52,7 @@ test('extended', async t => {
 
 test('resolve', async t => {
   const _ = await esDepsDeep('./fixtures/resolve');
-  const dep = esDepUnitMock(['fixtures', 'resolve']);
+  const dep = depMock(['fixtures', 'resolve']);
   t.deepEqual(_[0], dep(null, null, './index.js'));
   t.deepEqual(_[1], dep('./a', './index.js', './a.js'));
   t.deepEqual(_[2], dep('./b', './index.js', './b/index.js'));
@@ -61,7 +61,7 @@ test('resolve', async t => {
 
 test('cyclic', async t => {
   const _ = await esDepsDeep('./fixtures/cyclic/main.js');
-  const dep = esDepUnitMock(['fixtures', 'cyclic']);
+  const dep = depMock(['fixtures', 'cyclic']);
   t.deepEqual(_[0], dep(null, null, './main.js'));
   t.deepEqual(_[1], dep('./a.js', './main.js', './a.js'));
   t.deepEqual(_[2], dep('./b.js', './main.js', './b.js'));
@@ -70,7 +70,7 @@ test('cyclic', async t => {
 
 test('modules', async t => {
   const _ = await esDepsDeep('./fixtures/modules');
-  const dep = esDepUnitMock(['fixtures', 'modules']);
+  const dep = depMock(['fixtures', 'modules']);
   t.deepEqual(_[0], dep(null, null, './index.js'));
   t.deepEqual(_[1], dep('deep-modules-unresolved', './index.js', null));
   t.deepEqual(_[2], dep('./pew', './index.js', './pew.js'));
@@ -79,7 +79,7 @@ test('modules', async t => {
 
 test('modules nested', async t => {
   const _ = await esDepsDeep('./fixtures/modules-nested');
-  const dep = esDepUnitMock(['fixtures', 'modules-nested']);
+  const dep = depMock(['fixtures', 'modules-nested']);
   t.deepEqual(_[0], dep(null, null, './index.js'));
   t.deepEqual(_[1], dep('meow',  './index.js', './node_modules/meow/index.js'));
   t.deepEqual(_[2], dep('purr',  './node_modules/meow/index.js', './node_modules/meow/node_modules/purr/index.js'));
@@ -90,7 +90,7 @@ test('modules nested', async t => {
 
 test('missing', async t => {
   const _ = await esDepsDeep('./fixtures/missing');
-  const dep = esDepUnitMock(['fixtures', 'missing']);
+  const dep = depMock(['fixtures', 'missing']);
   t.deepEqual(_[0], dep(null, null, './index.js'));
   t.deepEqual(_[1], dep('./one.js',   './index.js', './one.js'));
   t.deepEqual(_[2], dep('./two.js',   './index.js', './two.js'));
@@ -100,7 +100,7 @@ test('missing', async t => {
 
 test('builtin', async t => {
   const _ = await esDepsDeep('./fixtures/builtin');
-  const dep = esDepUnitMock(['fixtures', 'builtin']);
+  const dep = depMock(['fixtures', 'builtin']);
   t.deepEqual(_[0], dep(null, null, './index.js'));
   t.deepEqual(_[1], dep('path',   './index.js', 'path'));
   t.is(_.length, 2);
@@ -108,7 +108,7 @@ test('builtin', async t => {
 
 test('json', async t => {
   const _ = await esDepsDeep('./fixtures/json');
-  const dep = esDepUnitMock(['fixtures', 'json']);
+  const dep = depMock(['fixtures', 'json']);
   t.deepEqual(_[0], dep(null, null, './index.js'));
   t.deepEqual(_[1], dep('./person.json',   './index.js', './person.json'));
   t.deepEqual(_[2], dep('./list.json',     './index.js', './list.json'));
@@ -162,7 +162,7 @@ test('exclude not resolved', async t => {
 
 test('exclude third parties', async t => {
   const _ = await esDepsDeep('./fixtures/exclude', kit.isThirdParty);
-  const dep = esDepUnitMock(['fixtures', 'exclude']);
+  const dep = depMock(['fixtures', 'exclude']);
   t.deepEqual(_[0], dep(null, null, './index.js'));
   t.deepEqual(_[1], dep('meow',  './index.js', './node_modules/meow/index.js'));
   t.deepEqual(_[2], dep('./pew', './index.js', './pew.js'));

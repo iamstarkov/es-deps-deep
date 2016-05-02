@@ -4,7 +4,7 @@ import Promise from 'pinkie-promise';
 import binded from 'binded';
 import esDepsResolved from 'es-deps-resolved';
 import resolveCwd from 'resolve-cwd';
-import { esDepUnit } from 'es-dep-unit';
+import dep from 'es-dep-unit';
 import isBuiltinModule from 'is-builtin-module';
 import contract from 'neat-contract';
 
@@ -62,7 +62,7 @@ function esDepsDeep(file, excludeFn = R.F) {
     R.tap(() => contract('excludeFn', Function, excludeFn)),
     resolveCwd,
     R.when(R.isNil, () => reject(new Error(`Can't find and open \`${file}\``))),
-    esDepUnit(null, null),
+    dep(null, null),
     R.of,
     R.reject(excludeFn),
     mapWalk,
