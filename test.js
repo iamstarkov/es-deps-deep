@@ -169,7 +169,7 @@ test('exclude third parties', async t => {
   t.is(_.length, 3);
 });
 
-test('files (used, extra)', async t => {
+test('filtering', async t => {
   const _ = await esDepsDeep('./fixtures/filtering');
 
   const files = _.filter(R.either(kit.isEntry, kit.isRequestedLocalFile));
