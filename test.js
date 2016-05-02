@@ -188,4 +188,4 @@ test('filtering', async t => {
 test('unresolved', t => t.throws(esDepsDeep('./fixtures/unresolved'), Error));
 test('empty input', t => t.throws(esDepsDeep(), TypeError));
 test('invalid input', t => t.throws(esDepsDeep(2), TypeError));
-test.todo('invalid excludeFn');
+test('invalid excludeFn', t => t.throws(esDepsDeep('./fixtures/basic', 2), TypeError));

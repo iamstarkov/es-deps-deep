@@ -59,6 +59,7 @@ function esDepsDeep(file, excludeFn = R.F) {
   // deep :: String -> Array[Object]
   const deep = R.pipeP(toPromise,
     contract('file', String),
+    R.tap(() => contract('excludeFn', Function, excludeFn)),
     resolveCwd,
     R.when(R.isNil, () => reject(new Error(`Can't find and open \`${file}\``))),
     esDepUnit(null, null),
