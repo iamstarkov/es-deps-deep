@@ -169,10 +169,21 @@ test('exclude third parties', async t => {
   t.is(_.length, 3);
 });
 
-test.todo('no-unused-files');
-test.todo('no-missed-files');
-test.todo('no-unused-modules');
-test.todo('no-missed-modules');
+test('files (used, extra)', async t => {
+  const _ = await esDepsDeep('./fixtures/filtering');
+
+  const files = _.filter(R.either(kit.isEntry, kit.isRequestedLocalFile));
+  const usedFiles = files.filter(kit.isResolved);
+  const extraFiles = files.filter(kit.isNotResolved);
+  t.is(usedFiles.length, 3);
+  t.is(extraFiles.length, 1);
+
+  const modules = _.filter(kit.isRequestedPackage);
+  const usedModules = modules.filter(kit.isResolved);
+  const extraModules = modules.filter(kit.isNotResolved);
+  t.is(usedModules.length, 2);
+  t.is(extraModules.length, 1);
+});
 
 test('unresolved', t => t.throws(esDepsDeep('./fixtures/unresolved'), Error));
 test('empty input', t => t.throws(esDepsDeep(), TypeError));
