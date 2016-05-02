@@ -121,47 +121,47 @@ test('not exclude at all, by default', async t => {
 });
 
 test('not exclude at all', async t => {
-  const _ = await esDepsDeep('./fixtures/exclude', R.F);
+  const _ = await esDepsDeep('./fixtures/exclude', { excludeFn: R.F });
   t.is(_.length, 5);
 });
 
 test('exclude everything', async t => {
-  const _ = await esDepsDeep('./fixtures/exclude', R.T);
+  const _ = await esDepsDeep('./fixtures/exclude', { excludeFn: R.T });
   t.is(_.length, 0);
 });
 
 test('exclude entry', async t => {
-  const _ = await esDepsDeep('./fixtures/exclude', kit.isEntry);
+  const _ = await esDepsDeep('./fixtures/exclude', { excludeFn: kit.isEntry });
   t.is(_.length, 0);
 });
 
 test('exclude modules', async t => {
-  const _ = await esDepsDeep('./fixtures/exclude', kit.isRequestedPackage);
+  const _ = await esDepsDeep('./fixtures/exclude', { excludeFn: kit.isRequestedPackage });
   t.is(_.length, 3);
 });
 
 test('exclude local files', async t => {
-  const _ = await esDepsDeep('./fixtures/exclude', kit.isRequestedLocalFile);
+  const _ = await esDepsDeep('./fixtures/exclude', { excludeFn: kit.isRequestedLocalFile });
   t.is(_.length, 3);
 });
 
 test('exclude node_modules', async t => {
-  const _ = await esDepsDeep('./fixtures/exclude', kit.isResolvedInNM);
+  const _ = await esDepsDeep('./fixtures/exclude', { excludeFn: kit.isResolvedInNM });
   t.is(_.length, 2);
 });
 
 test('exclude resolved', async t => {
-  const _ = await esDepsDeep('./fixtures/exclude', kit.isResolved);
+  const _ = await esDepsDeep('./fixtures/exclude', { excludeFn: kit.isResolved });
   t.is(_.length, 0);
 });
 
 test('exclude not resolved', async t => {
-  const _ = await esDepsDeep('./fixtures/exclude', kit.isNotResolved);
+  const _ = await esDepsDeep('./fixtures/exclude', { excludeFn: kit.isNotResolved });
   t.is(_.length, 5);
 });
 
 test('exclude third parties', async t => {
-  const _ = await esDepsDeep('./fixtures/exclude', kit.isThirdParty);
+  const _ = await esDepsDeep('./fixtures/exclude', { excludeFn: kit.isThirdParty });
   const dep = depMock(['fixtures', 'exclude']);
   t.deepEqual(_[0], dep(null, null, './index.js'));
   t.deepEqual(_[1], dep('meow',  './index.js', './node_modules/meow/index.js'));
@@ -188,4 +188,5 @@ test('filtering', async t => {
 test('unresolved', t => t.throws(esDepsDeep('./fixtures/unresolved'), Error));
 test('empty input', t => t.throws(esDepsDeep(), TypeError));
 test('invalid input', t => t.throws(esDepsDeep(2), TypeError));
-test('invalid excludeFn', t => t.throws(esDepsDeep('./fixtures/basic', 2), TypeError));
+test('invalid options', t => t.throws(esDepsDeep('./fixtures/basic', 2), TypeError));
+test('invalid excludeFn', t => t.throws(esDepsDeep('./fixtures/basic', { excludeFn: 2 }), TypeError));

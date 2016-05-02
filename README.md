@@ -15,7 +15,7 @@
 ## Usage
 
 ```js
-import { esDepsDeep, esDepsDeepAsync } from 'es-deps-deep';
+import esDepsDeep from 'es-deps-deep';
 
 esDepsDeep('./fixtures/extended/index.js')
   .then(result => console.log(result)); /* [
@@ -38,7 +38,7 @@ esDepsDeep('./fixtures/extended/index.js')
 
 ## API
 
-### esDepsDeepAsync(file, excludeFn)
+### esDepsDeepAsync(file, options)
 
 Return a promise that resolves to `Array[Object]`, where object is  [`es-dep-unit`][es-dep-unit].
 
@@ -51,12 +51,14 @@ Type: `String`
 
 Entry point of the for your app.
 
-#### excludeFn
+#### options
+
+##### excludeFn
 
 Type: `Function`  
 Default: `() => false;`
 
-`excludeFn` decides items to exclude from [`es-deps-resolved`][es-deps-resolved] each time when it's going to go deeper.
+`excludeFn` decides items to exclude from [`es-deps-resolved`][es-deps-resolved] each time when it's going deeper.
 
 [es-deps-resolved]: https://github.com/iamstarkov/es-deps-resolved
 

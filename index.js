@@ -34,9 +34,11 @@ const deps = R.pipeP(toPromise, _resolved, R.cond([
   [R.T, esDepsResolved],
 ]));
 
-// esDepsDeep :: String -> Array[Object]
-function esDepsDeep(file, excludeFn = R.F) {
+// esDepsDeep :: String -> Object -> Array[Object]
+function esDepsDeep(file, options = {}) {
   var cache = []; // eslint-disable-line
+
+  const excludeFn = options.excludeFn || R.F;
 
   // isInCache :: Object -> true
   const isInCache = R.pipe(_resolved, R.contains(R.__, cache));
@@ -63,6 +65,7 @@ function esDepsDeep(file, excludeFn = R.F) {
   // deep :: String -> Array[Object]
   const deep = R.pipeP(toPromise,
     contract('file', String),
+    R.tap(() => contract('options', Object, options)),
     R.tap(() => contract('excludeFn', Function, excludeFn)),
     resolveCwd,
     contract('file', String),
