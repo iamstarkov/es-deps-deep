@@ -61,7 +61,6 @@
     "rimraf": "^2.5.2"
   },
   "dependencies": {
-    "binded": "^1.0.1",
     "es-dep-kit": "^1.0.1",
     "es-dep-unit": "^2.0.0",
     "es-deps-resolved": "^0.3.3",

@@ -1,15 +1,19 @@
 /* eslint-disable no-underscore-dangle, no-use-before-define */
 import R from 'ramda';
 import Promise from 'pinkie-promise';
-import binded from 'binded';
 import esDepsResolved from 'es-deps-resolved';
 import resolveCwd from 'resolve-cwd';
 import dep from 'es-dep-unit';
 import isBuiltinModule from 'is-builtin-module';
 import contract from 'neat-contract';
 
-const { resolve: toPromise, all, reject } = binded(Promise);
+// toPromise :: a -> Promise a
+const toPromise = Promise.resolve.bind(Promise);
 
+// all :: Array[Promise a] -> Promise Array[a]
+const all = Promise.all.bind(Promise);
+
+// _resolved :: Object -> String|null
 const _resolved = R.prop('resolved');
 
 // d — debug
@@ -61,7 +65,7 @@ function esDepsDeep(file, excludeFn = R.F) {
     contract('file', String),
     R.tap(() => contract('excludeFn', Function, excludeFn)),
     resolveCwd,
-    R.when(R.isNil, () => reject(new Error(`Can't find and open \`${file}\``))),
+    contract('file', String),
     dep(null, null),
     R.of,
     R.reject(excludeFn),
