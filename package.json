@@ -63,7 +63,7 @@
   "dependencies": {
     "binded": "^1.0.1",
     "es-dep-kit": "^1.0.0",
-    "es-dep-unit": "^1.0.2",
+    "es-dep-unit": "^2.0.0",
     "es-deps-resolved": "^0.3.3",
     "is-builtin-module": "^1.0.0",
     "neat-contract": "^1.0.0",
