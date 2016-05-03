@@ -38,7 +38,7 @@ esDepsDeep('./fixtures/extended/index.js')
 
 ## API
 
-### esDepsDeepAsync(file, options)
+### esDepsDeep(file, options)
 
 Return a promise that resolves to `Array[Object]`, where object is  [`es-dep-unit`][es-dep-unit].
 
