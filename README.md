@@ -36,6 +36,8 @@ esDepsDeep('./fixtures/extended/index.js')
     resolved: '/Users/iamstarkov/projects/es-deps-deep/fixtures/extended/first/fourth/index.js' } ] */
 ```
 
+Showcase with `rollup` and `mkdirp` examples can be found in the [gist](https://gist.github.com/iamstarkov/b9b92a7daad0e22885c343ded3c6ccbf)
+
 ## API
 
 ### esDepsDeep(file, options)
