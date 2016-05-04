@@ -34,8 +34,8 @@ const deps = R.pipeP(toPromise, _resolved, R.cond([
   [R.T, esDepsResolved],
 ]));
 
-// esDepsDeep :: String -> Object -> Array[Object]
-function esDepsDeep(file, options = {}) {
+// esDepsDeep :: Array[String] -> Object -> Array[Object]
+function esDepsDeep(files, options = {}) {
   var cache = []; // eslint-disable-line
 
   const excludeFn = options.excludeFn || R.F;
@@ -62,21 +62,25 @@ function esDepsDeep(file, options = {}) {
     all
   );
 
-  // deep :: String -> Array[Object]
+  // deep :: Array[String] -> Array[Object]
   const deep = R.pipeP(toPromise,
-    contract('file', String),
-    R.tap(() => contract('options', Object, options)),
-    R.tap(() => contract('excludeFn', Function, excludeFn)),
-    resolveCwd,
-    R.when(R.isNil, () => { throw new Error(`Can't resolve file \`${file}\` `); }),
-    dep(null, null),
-    R.of,
+    R.pipe(
+      contract('files', Array),
+      R.map(contract('files[item]', String)),
+      R.tap(() => contract('options', Object, options)),
+      R.tap(() => contract('excludeFn', Function, excludeFn))
+    ),
+    R.map(file => R.pipe(
+      resolveCwd,
+      R.when(R.isNil, () => { throw new Error(`Can't resolve file \`${file}\` `); }),
+      dep(null, null)
+    )(file)),
     R.reject(excludeFn),
     mapWalk,
     R.unnest
   );
 
-  return deep(file);
+  return deep(files);
 }
 
 export default esDepsDeep;

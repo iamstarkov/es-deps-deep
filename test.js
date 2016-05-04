@@ -6,14 +6,14 @@ import kit from 'es-dep-kit';
 import { mock as depMock } from 'es-dep-unit';
 
 test('basic one', async t => {
-  const _ = await esDepsDeep('./fixtures/basic/first/second/index.js');
+  const _ = await esDepsDeep(['./fixtures/basic/first/second/index.js']);
   const dep = depMock(['fixtures', 'basic']);
   t.deepEqual(_[0], dep(null, null, './first/second/index.js'));
   t.is(_.length, 1);
 });
 
 test('basic two', async t => {
-  const _ = await esDepsDeep('./fixtures/basic/first/index.js');
+  const _ = await esDepsDeep(['./fixtures/basic/first/index.js']);
   const dep = depMock(['fixtures', 'basic']);
   t.deepEqual(_[0], dep(null, null, './first/index.js'));
   t.deepEqual(_[1], dep('./second/index.js', './first/index.js', './first/second/index.js'));
@@ -21,7 +21,7 @@ test('basic two', async t => {
 });
 
 test('basic three', async t => {
-  const _ = await esDepsDeep('./fixtures/basic/index.js');
+  const _ = await esDepsDeep(['./fixtures/basic/index.js']);
   const dep = depMock(['fixtures', 'basic']);
   t.deepEqual(_[0], dep(null, null, './index.js'));
   t.deepEqual(_[1], dep('./first/index.js', './index.js', './first/index.js'));
@@ -30,7 +30,7 @@ test('basic three', async t => {
 });
 
 test('basic plus', async t => {
-  const _ = await esDepsDeep('./fixtures/basic-plus/index.js');
+  const _ = await esDepsDeep(['./fixtures/basic-plus/index.js']);
   const dep = depMock(['fixtures', 'basic-plus']);
   t.deepEqual(_[0], dep(null, null, './index.js'));
   t.deepEqual(_[1], dep('./first/index.js',  './index.js',              './first/index.js'));
@@ -40,7 +40,7 @@ test('basic plus', async t => {
 });
 
 test('extended', async t => {
-  const _ = await esDepsDeep('./fixtures/extended/index.js');
+  const _ = await esDepsDeep(['./fixtures/extended/index.js']);
   const dep = depMock(['fixtures', 'extended']);
   t.deepEqual(_[0], dep(null, null, './index.js'));
   t.deepEqual(_[1], dep('./first/index.js', './index.js', './first/index.js'));
@@ -50,8 +50,12 @@ test('extended', async t => {
   t.is(_.length, 5);
 });
 
+test('basic+extended', async t => {
+  const _ = await esDepsDeep(['./fixtures/basic', './fixtures/extended']);
+  t.is(_.length, 8);
+});
 test('resolve', async t => {
-  const _ = await esDepsDeep('./fixtures/resolve');
+  const _ = await esDepsDeep(['./fixtures/resolve']);
   const dep = depMock(['fixtures', 'resolve']);
   t.deepEqual(_[0], dep(null, null, './index.js'));
   t.deepEqual(_[1], dep('./a', './index.js', './a.js'));
@@ -60,7 +64,7 @@ test('resolve', async t => {
 });
 
 test('cyclic', async t => {
-  const _ = await esDepsDeep('./fixtures/cyclic/main.js');
+  const _ = await esDepsDeep(['./fixtures/cyclic/main.js']);
   const dep = depMock(['fixtures', 'cyclic']);
   t.deepEqual(_[0], dep(null, null, './main.js'));
   t.deepEqual(_[1], dep('./a.js', './main.js', './a.js'));
@@ -69,7 +73,7 @@ test('cyclic', async t => {
 });
 
 test('modules', async t => {
-  const _ = await esDepsDeep('./fixtures/modules');
+  const _ = await esDepsDeep(['./fixtures/modules']);
   const dep = depMock(['fixtures', 'modules']);
   t.deepEqual(_[0], dep(null, null, './index.js'));
   t.deepEqual(_[1], dep('deep-modules-unresolved', './index.js', null));
@@ -78,7 +82,7 @@ test('modules', async t => {
 });
 
 test('modules nested', async t => {
-  const _ = await esDepsDeep('./fixtures/modules-nested');
+  const _ = await esDepsDeep(['./fixtures/modules-nested']);
   const dep = depMock(['fixtures', 'modules-nested']);
   t.deepEqual(_[0], dep(null, null, './index.js'));
   t.deepEqual(_[1], dep('meow',  './index.js', './node_modules/meow/index.js'));
@@ -89,7 +93,7 @@ test('modules nested', async t => {
 });
 
 test('missing', async t => {
-  const _ = await esDepsDeep('./fixtures/missing');
+  const _ = await esDepsDeep(['./fixtures/missing']);
   const dep = depMock(['fixtures', 'missing']);
   t.deepEqual(_[0], dep(null, null, './index.js'));
   t.deepEqual(_[1], dep('./one.js',   './index.js', './one.js'));
@@ -99,7 +103,7 @@ test('missing', async t => {
 });
 
 test('builtin', async t => {
-  const _ = await esDepsDeep('./fixtures/builtin');
+  const _ = await esDepsDeep(['./fixtures/builtin']);
   const dep = depMock(['fixtures', 'builtin']);
   t.deepEqual(_[0], dep(null, null, './index.js'));
   t.deepEqual(_[1], dep('path',   './index.js', 'path'));
@@ -107,7 +111,7 @@ test('builtin', async t => {
 });
 
 test('json', async t => {
-  const _ = await esDepsDeep('./fixtures/json');
+  const _ = await esDepsDeep(['./fixtures/json']);
   const dep = depMock(['fixtures', 'json']);
   t.deepEqual(_[0], dep(null, null, './index.js'));
   t.deepEqual(_[1], dep('./person.json',   './index.js', './person.json'));
@@ -116,52 +120,52 @@ test('json', async t => {
 });
 
 test('not exclude at all, by default', async t => {
-  const _ = await esDepsDeep('./fixtures/exclude');
+  const _ = await esDepsDeep(['./fixtures/exclude']);
   t.is(_.length, 5);
 });
 
 test('not exclude at all', async t => {
-  const _ = await esDepsDeep('./fixtures/exclude', { excludeFn: R.F });
+  const _ = await esDepsDeep(['./fixtures/exclude'], { excludeFn: R.F });
   t.is(_.length, 5);
 });
 
 test('exclude everything', async t => {
-  const _ = await esDepsDeep('./fixtures/exclude', { excludeFn: R.T });
+  const _ = await esDepsDeep(['./fixtures/exclude'], { excludeFn: R.T });
   t.is(_.length, 0);
 });
 
 test('exclude entry', async t => {
-  const _ = await esDepsDeep('./fixtures/exclude', { excludeFn: kit.isEntry });
+  const _ = await esDepsDeep(['./fixtures/exclude'], { excludeFn: kit.isEntry });
   t.is(_.length, 0);
 });
 
 test('exclude modules', async t => {
-  const _ = await esDepsDeep('./fixtures/exclude', { excludeFn: kit.isRequestedPackage });
+  const _ = await esDepsDeep(['./fixtures/exclude'], { excludeFn: kit.isRequestedPackage });
   t.is(_.length, 3);
 });
 
 test('exclude local files', async t => {
-  const _ = await esDepsDeep('./fixtures/exclude', { excludeFn: kit.isRequestedLocalFile });
+  const _ = await esDepsDeep(['./fixtures/exclude'], { excludeFn: kit.isRequestedLocalFile });
   t.is(_.length, 3);
 });
 
 test('exclude node_modules', async t => {
-  const _ = await esDepsDeep('./fixtures/exclude', { excludeFn: kit.isResolvedInNM });
+  const _ = await esDepsDeep(['./fixtures/exclude'], { excludeFn: kit.isResolvedInNM });
   t.is(_.length, 2);
 });
 
 test('exclude resolved', async t => {
-  const _ = await esDepsDeep('./fixtures/exclude', { excludeFn: kit.isResolved });
+  const _ = await esDepsDeep(['./fixtures/exclude'], { excludeFn: kit.isResolved });
   t.is(_.length, 0);
 });
 
 test('exclude not resolved', async t => {
-  const _ = await esDepsDeep('./fixtures/exclude', { excludeFn: kit.isNotResolved });
+  const _ = await esDepsDeep(['./fixtures/exclude'], { excludeFn: kit.isNotResolved });
   t.is(_.length, 5);
 });
 
 test('exclude third parties', async t => {
-  const _ = await esDepsDeep('./fixtures/exclude', { excludeFn: kit.isThirdParty });
+  const _ = await esDepsDeep(['./fixtures/exclude'], { excludeFn: kit.isThirdParty });
   const dep = depMock(['fixtures', 'exclude']);
   t.deepEqual(_[0], dep(null, null, './index.js'));
   t.deepEqual(_[1], dep('meow',  './index.js', './node_modules/meow/index.js'));
@@ -170,7 +174,7 @@ test('exclude third parties', async t => {
 });
 
 test('filtering', async t => {
-  const _ = await esDepsDeep('./fixtures/filtering');
+  const _ = await esDepsDeep(['./fixtures/filtering']);
 
   const files = _.filter(R.either(kit.isEntry, kit.isRequestedLocalFile));
   const usedFiles = files.filter(kit.isResolved);
@@ -185,8 +189,9 @@ test('filtering', async t => {
   t.is(extraModules.length, 1);
 });
 
-test('unresolved', t => t.throws(esDepsDeep('./fixtures/unresolved'), Error));
+test('unresolved', t => t.throws(esDepsDeep(['./fixtures/unresolved']), Error));
 test('empty input', t => t.throws(esDepsDeep(), TypeError));
-test('invalid input', t => t.throws(esDepsDeep(2), TypeError));
+test('invalid files', t => t.throws(esDepsDeep(2), TypeError));
+test('invalid files[item]', t => t.throws(esDepsDeep([2]), TypeError));
 test('invalid options', t => t.throws(esDepsDeep('./fixtures/basic', 2), TypeError));
-test('invalid excludeFn', t => t.throws(esDepsDeep('./fixtures/basic', { excludeFn: 2 }), TypeError));
+test('invalid options.excludeFn', t => t.throws(esDepsDeep('./fixtures/basic', { excludeFn: 2 }), TypeError));

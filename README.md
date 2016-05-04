@@ -17,7 +17,7 @@
 ```js
 import esDepsDeep from 'es-deps-deep';
 
-esDepsDeep('./fixtures/extended/index.js')
+esDepsDeep(['./fixtures/extended'])
   .then(result => console.log(result)); /* [
   { requested: null,
     from: null,
@@ -44,18 +44,18 @@ Another examples with [rollup][rollup] and [mkdirp][mkdirp] can be found in the 
 
 ## API
 
-### esDepsDeep(file, options)
+### esDepsDeep(files, options)
 
 Return a promise that resolves to `Array[Object]`, where object is  [`es-dep-unit`][es-dep-unit].
 
 [es-dep-unit]: https://github.com/iamstarkov/es-dep-unit
 
-#### file
+#### files
 
 *Required*  
-Type: `String`
+Type: `Array` of `String`
 
-Entry point of the for your app.
+Entry points for your app.
 
 #### options
 
