@@ -68,7 +68,7 @@ function esDepsDeep(file, options = {}) {
     R.tap(() => contract('options', Object, options)),
     R.tap(() => contract('excludeFn', Function, excludeFn)),
     resolveCwd,
-    contract('file', String),
+    R.when(R.isNil, () => { throw new Error(`Can't resolve file \`${file}\` `); }),
     dep(null, null),
     R.of,
     R.reject(excludeFn),
