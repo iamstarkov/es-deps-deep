@@ -27,12 +27,11 @@ const isJSON = R.pipe(R.split('.'), R.last, R.equals('json'));
 const emptyDeps = R.always([]);
 
 // deps :: String -> Boolean
-const deps = R.pipeP(toPromise, _resolved, R.cond([
-  [R.isNil, emptyDeps],
-  [isBuiltinModule, emptyDeps],
-  [isJSON, emptyDeps],
-  [R.T, esDepsResolved],
-]));
+const deps = R.pipeP(toPromise, _resolved, R.ifElse(
+  R.anyPass([R.isNil, isBuiltinModule, isJSON]),
+  emptyDeps,
+  esDepsResolved
+));
 
 // esDepsDeep :: Array[String] -> Object -> Array[Object]
 function esDepsDeep(files, options = {}) {
