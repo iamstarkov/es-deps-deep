@@ -63,7 +63,7 @@
   "dependencies": {
     "es-dep-kit": "^1.0.1",
     "es-dep-unit": "^2.0.0",
-    "es-deps-resolved": "^1.0.1",
+    "es-deps-resolved": "^2.0.0",
     "is-builtin-module": "^1.0.0",
     "neat-contract": "^1.0.0",
     "pinkie-promise": "^2.0.1",
